@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/EvanOman/goodreads-tools/compare/goodreads-tools-v1.1.2...goodreads-tools-v1.1.3) (2026-01-03)
+
+
+### Documentation
+
+* note PyPI publisher workflow ([#20](https://github.com/EvanOman/goodreads-tools/issues/20)) ([24230f9](https://github.com/EvanOman/goodreads-tools/commit/24230f9334fdf2acadd5d60906b8cf2c76805a50))
+
 ## [1.1.2](https://github.com/EvanOman/goodreads-tools/compare/goodreads-tools-v1.1.1...goodreads-tools-v1.1.2) (2026-01-03)
 
 

@@ -1,6 +1,6 @@
 ## Goodreads Tools (unofficial)
 
-A fast, scriptable CLI that turns your Goodreads shelves into dashboard-ready data. It exports clean JSONL for your reading timeline (including rereads), estimates pages per day, and renders a text-based bar chart you can use in a terminal or CI logs.
+A pragmatic, scriptable CLI that turns your Goodreads shelves into dashboard-ready data. It exports clean JSONL for your reading timeline (including rereads), estimates pages per day, and renders a text-based bar chart you can use in a terminal or CI logs.
 
 ### What it does
 

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from goodreads_cli.search import parse_search_results
+from goodreads_cli.public.search import parse_search_results
 
 
 def test_parse_search_results() -> None:

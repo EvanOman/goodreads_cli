@@ -1,4 +1,4 @@
-from goodreads_cli.user import parse_current_user
+from goodreads_cli.auth.user import parse_current_user
 
 
 def test_parse_current_user() -> None:

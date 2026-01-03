@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from goodreads_cli.search import search_books
+from goodreads_cli.public.search import search_books
 
 
 @pytest.mark.live

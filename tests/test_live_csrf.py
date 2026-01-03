@@ -2,8 +2,8 @@ import os
 
 import pytest
 
-from goodreads_cli.auth import create_session_from_cookie_string
-from goodreads_cli.csrf import fetch_csrf_token
+from goodreads_cli.auth.csrf import fetch_csrf_token
+from goodreads_cli.auth.session import create_session_from_cookie_string
 from goodreads_cli.http_client import GoodreadsClient
 
 

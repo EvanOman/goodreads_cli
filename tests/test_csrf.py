@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from goodreads_cli.csrf import extract_csrf_token
+from goodreads_cli.auth.csrf import extract_csrf_token
 
 
 def test_extract_csrf_token_from_fixture() -> None:

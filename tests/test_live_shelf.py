@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from goodreads_cli.shelf import get_shelf_items
+from goodreads_cli.public.shelf import get_shelf_items
 
 
 @pytest.mark.live

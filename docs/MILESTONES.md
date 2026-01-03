@@ -18,7 +18,7 @@ Status: complete (search command + unit/live tests).
 
 Deliverables:
 
-- `goodreads-cli search "<query>"` fetches autocomplete JSON and prints results.
+- `goodreads-cli public search "<query>"` fetches autocomplete JSON and prints results.
 - Shared HTTP client with basic rate limiting and error handling.
 - Unit tests for the search parser + models.
 - Live test that hits the Goodreads autocomplete endpoint.
@@ -29,7 +29,7 @@ Status: complete (book show command + unit/live tests).
 
 Deliverables:
 
-- `goodreads-cli book show <id|url>` parses `__NEXT_DATA__` for title/author/rating.
+- `goodreads-cli public book show <id|url>` parses `__NEXT_DATA__` for title/author/rating.
 - Book parser unit tests with saved HTML fixtures.
 - Live test that fetches a known book page and validates core fields.
 
@@ -39,7 +39,7 @@ Status: complete (shelf list + export, unit/live tests).
 
 Deliverables:
 
-- `goodreads-cli shelf list --user <id> --shelf <name>` reads RSS when public.
+- `goodreads-cli public shelf list --user <id> --shelf <name>` reads RSS when public.
 - CSV/JSON export support.
 - Unit tests for RSS parser and CSV output.
 - Live test against a public shelf (e.g., user id `1`).
@@ -50,7 +50,7 @@ Status: in progress (auth scaffolding + whoami + csrf helper complete; write flo
 
 Deliverables:
 
-- `goodreads-cli login` stores browser cookies and confirms `whoami`.
+- `goodreads-cli auth login` stores browser cookies and confirms `whoami`.
 - Write commands (shelve/rate/review) based on captured POST flows.
 - Unit tests for auth/session loading + mocked POST handling.
 - Live test for a safe write (opt-in and user-confirmed).

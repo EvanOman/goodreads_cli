@@ -1,6 +1,11 @@
 from pathlib import Path
 
-from goodreads_cli.auth import SessionData, load_session, parse_cookie_string, save_session
+from goodreads_cli.auth.session import (
+    SessionData,
+    load_session,
+    parse_cookie_string,
+    save_session,
+)
 
 
 def test_parse_cookie_string() -> None:

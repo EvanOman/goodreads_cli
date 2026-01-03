@@ -7,24 +7,29 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from goodreads_cli.auth import (
+from goodreads_cli.auth.csrf import fetch_csrf_token
+from goodreads_cli.auth.session import (
     SESSION_PATH,
     create_session_from_browser,
     create_session_from_cookie_string,
     load_session,
     save_session,
 )
-from goodreads_cli.book import get_book_details
-from goodreads_cli.csrf import fetch_csrf_token
+from goodreads_cli.auth.user import get_current_user
 from goodreads_cli.http_client import GoodreadsClient
-from goodreads_cli.search import search_books
-from goodreads_cli.shelf import get_shelf_items, shelf_items_to_csv, shelf_items_to_json
-from goodreads_cli.user import get_current_user
+from goodreads_cli.public.book import get_book_details
+from goodreads_cli.public.search import search_books
+from goodreads_cli.public.shelf import (
+    get_shelf_items,
+    shelf_items_to_csv,
+    shelf_items_to_json,
+)
 
 app = typer.Typer(help="Unofficial Goodreads CLI (see docs/PLAN.md).")
-book_app = typer.Typer(help="Book commands.")
-shelf_app = typer.Typer(help="Shelf commands.")
-auth_app = typer.Typer(help="Auth/session helpers.")
+public_app = typer.Typer(help="Public (no-auth) commands.")
+public_book_app = typer.Typer(help="Public book commands.")
+public_shelf_app = typer.Typer(help="Public shelf commands.")
+auth_app = typer.Typer(help="Authenticated session helpers.")
 console = Console()
 
 
@@ -45,12 +50,14 @@ def root(ctx: typer.Context) -> None:
         _print_docs_message()
 
 
-app.add_typer(book_app, name="book")
-app.add_typer(shelf_app, name="shelf")
+app.add_typer(public_app, name="public")
+app.add_typer(auth_app, name="auth")
+public_app.add_typer(public_book_app, name="book")
+public_app.add_typer(public_shelf_app, name="shelf")
 app.add_typer(auth_app, name="auth")
 
 
-@app.command()
+@public_app.command()
 def search(
     query: str,
     limit: int = typer.Option(10, "--limit", "-n", min=0),
@@ -86,7 +93,7 @@ def search(
     console.print(table)
 
 
-@app.command()
+@auth_app.command("login")
 def login(
     cookie_string: str | None = typer.Option(None, "--cookie-string"),
     browser: str | None = typer.Option(
@@ -116,7 +123,7 @@ def login(
             console.print(f"Logged in as {user.name} ({user.user_id}).")
 
 
-@app.command()
+@auth_app.command("whoami")
 def whoami(session_path: Path = typer.Option(SESSION_PATH, "--session-path")) -> None:
     """Show the current user based on stored session cookies."""
     session = load_session(session_path)
@@ -147,7 +154,7 @@ def auth_check(session_path: Path = typer.Option(SESSION_PATH, "--session-path")
         console.print("[yellow]CSRF token not found.[/yellow]")
 
 
-@book_app.command("show")
+@public_book_app.command("show")
 def book_show(
     book: str,
     json_output: bool = typer.Option(False, "--json"),
@@ -180,7 +187,7 @@ def book_show(
     console.print(table)
 
 
-@shelf_app.command("list")
+@public_shelf_app.command("list")
 def shelf_list(
     user: str = typer.Option(..., "--user"),
     shelf: str = typer.Option("all", "--shelf"),
@@ -213,7 +220,7 @@ def shelf_list(
     console.print(table)
 
 
-@shelf_app.command("export")
+@public_shelf_app.command("export")
 def shelf_export(
     user: str = typer.Option(..., "--user"),
     shelf: str = typer.Option("all", "--shelf"),

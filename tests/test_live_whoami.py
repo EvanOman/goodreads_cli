@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from goodreads_cli.auth import create_session_from_cookie_string
+from goodreads_cli.auth.session import create_session_from_cookie_string
+from goodreads_cli.auth.user import get_current_user
 from goodreads_cli.http_client import GoodreadsClient
-from goodreads_cli.user import get_current_user
 
 
 @pytest.mark.live

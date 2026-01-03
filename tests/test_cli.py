@@ -29,7 +29,7 @@ def test_cli_search_json(monkeypatch) -> None:
         ]
 
     monkeypatch.setattr("goodreads_cli.cli.search_books", fake_search_books)
-    result = runner.invoke(app, ["search", "Fake", "--json"])
+    result = runner.invoke(app, ["public", "search", "Fake", "--json"])
     assert result.exit_code == 0
 
     payload = json.loads(_strip_ansi(result.stdout))
@@ -49,7 +49,7 @@ def test_cli_book_json(monkeypatch) -> None:
         )
 
     monkeypatch.setattr("goodreads_cli.cli.get_book_details", fake_book_details)
-    result = runner.invoke(app, ["book", "show", "123", "--json"])
+    result = runner.invoke(app, ["public", "book", "show", "123", "--json"])
     assert result.exit_code == 0
     payload = json.loads(_strip_ansi(result.stdout))
     assert payload["title"] == "Example"
@@ -71,7 +71,8 @@ def test_cli_shelf_export_csv(monkeypatch) -> None:
 
     monkeypatch.setattr("goodreads_cli.cli.get_shelf_items", fake_shelf_items)
     result = runner.invoke(
-        app, ["shelf", "export", "--user", "1", "--shelf", "all", "--format", "csv"]
+        app,
+        ["public", "shelf", "export", "--user", "1", "--shelf", "all", "--format", "csv"],
     )
     assert result.exit_code == 0
     assert "title,author,book_id,link" in result.stdout

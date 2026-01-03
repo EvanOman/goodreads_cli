@@ -12,16 +12,16 @@ This project aims to provide a modern, scriptable Goodreads command-line client 
 
 ```bash
 # search titles
-uv run goodreads-cli search "Dune" -n 5
+uv run goodreads-cli public search "Dune" -n 5
 
 # fetch book details
-uv run goodreads-cli book show 44767458
+uv run goodreads-cli public book show 44767458
 
 # list a public shelf
-uv run goodreads-cli shelf list --user 1 --shelf all -n 5
+uv run goodreads-cli public shelf list --user 1 --shelf all -n 5
 
 # export a shelf
-uv run goodreads-cli shelf export --user 1 --shelf all --format json
+uv run goodreads-cli public shelf export --user 1 --shelf all --format json
 ```
 
 ### Current status
@@ -47,23 +47,23 @@ uvx --from . goodreads-cli --help
 uvx --from git+https://github.com/EvanOman/goodreads_cli goodreads-cli --help
 
 # search titles
-uv run goodreads-cli search "Dune" -n 5
+uv run goodreads-cli public search "Dune" -n 5
 
 # fetch a book by id or url
-uv run goodreads-cli book show 44767458
+uv run goodreads-cli public book show 44767458
 
 # list a public shelf via RSS
-uv run goodreads-cli shelf list --user 1 --shelf all -n 5
+uv run goodreads-cli public shelf list --user 1 --shelf all -n 5
 
 # export a shelf to JSON or CSV
-uv run goodreads-cli shelf export --user 1 --shelf all --format json
+uv run goodreads-cli public shelf export --user 1 --shelf all --format json
 
 # store cookies from browser or manual cookie string
-uv run goodreads-cli login --browser chrome
-uv run goodreads-cli login --cookie-string "_session_id2=...; ccsid=...; locale=en"
+uv run goodreads-cli auth login --browser chrome
+uv run goodreads-cli auth login --cookie-string "_session_id2=...; ccsid=...; locale=en"
 
 # show the current authenticated user
-uv run goodreads-cli whoami
+uv run goodreads-cli auth whoami
 
 # validate session + csrf extraction
 uv run goodreads-cli auth check

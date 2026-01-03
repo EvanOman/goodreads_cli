@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from goodreads_cli.book import parse_book_details
+from goodreads_cli.public.book import parse_book_details
 
 
 def test_parse_book_details() -> None:

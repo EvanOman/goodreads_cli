@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from goodreads_cli.book import get_book_details
+from goodreads_cli.public.book import get_book_details
 
 
 @pytest.mark.live

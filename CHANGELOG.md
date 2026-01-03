@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/EvanOman/goodreads-tools/compare/goodreads-tools-v1.1.1...goodreads-tools-v1.1.2) (2026-01-03)
+
+
+### Documentation
+
+* update publish flow ([#17](https://github.com/EvanOman/goodreads-tools/issues/17)) ([3dbdee8](https://github.com/EvanOman/goodreads-tools/commit/3dbdee8b7a34429a0670a278fe5c5eac44e5e788))
+
 ## [1.1.1](https://github.com/EvanOman/goodreads-tools/compare/goodreads-tools-v1.1.0...goodreads-tools-v1.1.1) (2026-01-03)
 
 

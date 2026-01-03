@@ -1,6 +1,6 @@
 [project]
 name = "goodreads-tools"
-version = "1.1.1"
+version = "1.1.2"
 description = "Unofficial Goodreads tools for exporting reading timelines and pages/day charts."
 readme = "README.md"
 authors = [

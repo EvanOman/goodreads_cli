@@ -44,9 +44,10 @@ jobs:
           content = path.read_text(encoding="utf-8")
           updated = re.sub(r'(?m)^version = "[^"]+"', f'version = "{version}"', content)
           if content == updated:
-              raise SystemExit("Failed to update version in pyproject.toml")
-          path.write_text(updated, encoding="utf-8")
-          print(f"Set version to {version}")
+              print(f"Version already set to {version}")
+          else:
+              path.write_text(updated, encoding="utf-8")
+              print(f"Set version to {version}")
           PY
         shell: bash
 

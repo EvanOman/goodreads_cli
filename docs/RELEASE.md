@@ -25,6 +25,7 @@ Rules of thumb:
 
 - Do not bump versions by hand; release-please owns versioning and changelogs.
 - Leave the release PR open until you are ready to cut a release.
+- PyPI trusted publisher should point to `release.yml` (Publish to PyPI workflow).
 
 ## Release flow
 

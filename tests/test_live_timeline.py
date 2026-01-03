@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from goodreads_cli.public.timeline import get_reading_timeline
+from goodreads_tools.public.timeline import get_reading_timeline
 
 
 @pytest.mark.live

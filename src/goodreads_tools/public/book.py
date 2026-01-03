@@ -5,8 +5,8 @@ from typing import Any
 
 from selectolax.parser import HTMLParser
 
-from goodreads_cli.http_client import GoodreadsClient
-from goodreads_cli.models import BookDetails
+from goodreads_tools.http_client import GoodreadsClient
+from goodreads_tools.models import BookDetails
 
 
 def _extract_next_data(html: str) -> dict[str, Any]:

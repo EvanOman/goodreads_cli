@@ -4,8 +4,8 @@ import json
 import re
 from typing import Any
 
-from goodreads_cli.http_client import GoodreadsClient
-from goodreads_cli.models import UserInfo
+from goodreads_tools.http_client import GoodreadsClient
+from goodreads_tools.models import UserInfo
 
 _CURRENT_USER_RE = re.compile(
     r"CurrentUserStore\.initializeWith\((\{.*?\})\);",

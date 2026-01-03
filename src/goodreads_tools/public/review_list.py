@@ -6,8 +6,8 @@ from urllib.parse import urljoin
 
 from selectolax.parser import HTMLParser, Node
 
-from goodreads_cli.http_client import DEFAULT_BASE_URL, GoodreadsClient
-from goodreads_cli.models import ReadingTimelineEntry
+from goodreads_tools.http_client import DEFAULT_BASE_URL, GoodreadsClient
+from goodreads_tools.models import ReadingTimelineEntry
 
 _DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y", "%b %Y", "%B %Y", "%Y")
 

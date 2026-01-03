@@ -1,7 +1,7 @@
 from datetime import date
 
-from goodreads_cli.models import ReadingTimelineEntry
-from goodreads_cli.public.reading_stats import (
+from goodreads_tools.models import ReadingTimelineEntry
+from goodreads_tools.public.reading_stats import (
     bin_daily_pages,
     estimate_daily_pages,
     format_bin_label,

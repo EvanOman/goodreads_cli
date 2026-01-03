@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 
-from goodreads_cli.public.shelf import parse_shelf_rss
-from goodreads_cli.public.timeline import build_reading_timeline, timeline_entries_to_jsonl
+from goodreads_tools.public.shelf import parse_shelf_rss
+from goodreads_tools.public.timeline import build_reading_timeline, timeline_entries_to_jsonl
 
 
 def test_build_reading_timeline_jsonl() -> None:

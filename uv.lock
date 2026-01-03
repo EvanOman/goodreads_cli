@@ -96,8 +96,8 @@ wheels = [
 ]
 
 [[package]]
-name = "goodreads-cli"
-version = "0.0.1"
+name = "goodreads-tools"
+version = "0.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "browser-cookie3" },

@@ -2,7 +2,7 @@
   "release-type": "python",
   "packages": {
     ".": {
-      "package-name": "goodreads-cli",
+      "package-name": "goodreads-tools",
       "extra-files": ["pyproject.toml"]
     }
   }

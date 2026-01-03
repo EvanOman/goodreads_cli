@@ -1,4 +1,4 @@
-from goodreads_cli import main
+from goodreads_tools import main
 
 if __name__ == "__main__":
     main()

@@ -4,7 +4,7 @@ import re
 
 from selectolax.parser import HTMLParser
 
-from goodreads_cli.http_client import GoodreadsClient
+from goodreads_tools.http_client import GoodreadsClient
 
 _CSRF_RE = re.compile(
     r'<meta\\s+name="csrf-token"\\s+content="([^"]+)"',

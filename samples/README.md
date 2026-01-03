@@ -5,7 +5,7 @@
 Command:
 
 ```bash
-uv run goodreads-cli public shelf chart --user <user-id> --shelf read --source html --from 2023-01-01 --to 2025-12-30 --bin-days 14 --width 120 --height 18
+uv run goodreads-tools public shelf chart --user <user-id> --shelf read --source html --from 2023-01-01 --to 2025-12-30 --bin-days 14 --width 120 --height 18
 ```
 
 Output:

@@ -4,7 +4,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
-from goodreads_cli.models import ReadingTimelineEntry
+from goodreads_tools.models import ReadingTimelineEntry
 
 
 @dataclass(frozen=True)

@@ -9,7 +9,7 @@ from pathlib import Path
 
 import browser_cookie3
 
-CONFIG_DIR = Path.home() / ".config" / "goodreads-cli"
+CONFIG_DIR = Path.home() / ".config" / "goodreads-tools"
 SESSION_PATH = CONFIG_DIR / "session.json"
 
 

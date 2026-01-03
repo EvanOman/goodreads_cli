@@ -1,6 +1,6 @@
-## Goodreads CLI (unofficial)
+## Goodreads Tools (unofficial)
 
-A fast, scriptable CLI that turns your Goodreads shelves into dashboard-ready data. It exports clean JSONL for your reading timeline (including rereads), estimates pages per day, and renders a text-based bar chart you can use in a terminal or CI logs.
+A pragmatic, scriptable CLI that turns your Goodreads shelves into dashboard-ready data. It exports clean JSONL for your reading timeline (including rereads), estimates pages per day, and renders a text-based bar chart you can use in a terminal or CI logs.
 
 ### What it does
 
@@ -37,13 +37,13 @@ More sample outputs live in `samples/README.md`.
 
 ```bash
 # search titles
-uv run goodreads-cli public search "Dune" -n 5
+uv run goodreads-tools public search "Dune" -n 5
 
 # export a reading timeline as JSONL
-uv run goodreads-cli public shelf timeline --user <user-id> --shelf read --source html --format jsonl
+uv run goodreads-tools public shelf timeline --user <user-id> --shelf read --source html --format jsonl
 
 # render a pages/day chart for a date range
-uv run goodreads-cli public shelf chart --user <user-id> --shelf read --source html --from 2023-01-01 --to 2025-12-30 --bin-days 14
+uv run goodreads-tools public shelf chart --user <user-id> --shelf read --source html --from 2023-01-01 --to 2025-12-30 --bin-days 14
 ```
 
 ### Development
@@ -53,13 +53,13 @@ uv run goodreads-cli public shelf chart --user <user-id> --shelf read --source h
 uv sync
 
 # run the dev CLI
-uv run goodreads-cli
+uv run goodreads-tools
 
 # run via uvx (local)
-uvx --from . goodreads-cli --help
+uvx --from . goodreads-tools --help
 
 # run via uvx (git)
-uvx --from git+https://github.com/EvanOman/goodreads_cli goodreads-cli --help
+uvx --from git+https://github.com/EvanOman/goodreads-tools goodreads-tools --help
 
 # run unit tests
 uv run pytest

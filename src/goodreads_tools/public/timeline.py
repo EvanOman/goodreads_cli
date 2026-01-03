@@ -6,11 +6,11 @@ from datetime import UTC
 from email.utils import parsedate_to_datetime
 from typing import Literal
 
-from goodreads_cli.http_client import GoodreadsClient
-from goodreads_cli.models import ReadingTimelineEntry, ShelfItem
-from goodreads_cli.public.book import get_book_details
-from goodreads_cli.public.review_list import get_review_list_timeline
-from goodreads_cli.public.shelf import get_shelf_items
+from goodreads_tools.http_client import GoodreadsClient
+from goodreads_tools.models import ReadingTimelineEntry, ShelfItem
+from goodreads_tools.public.book import get_book_details
+from goodreads_tools.public.review_list import get_review_list_timeline
+from goodreads_tools.public.shelf import get_shelf_items
 
 StartDateSource = Literal["auto", "started", "added", "created"]
 TimelineSource = Literal["rss", "html"]

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
-from goodreads_cli.public.reading_stats import PagesBin, format_bin_label
+from goodreads_tools.public.reading_stats import PagesBin, format_bin_label
 
 
 def render_pages_per_day_chart(

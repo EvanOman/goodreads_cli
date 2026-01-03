@@ -6,8 +6,8 @@ import json
 from collections.abc import Iterable
 from xml.etree import ElementTree
 
-from goodreads_cli.http_client import GoodreadsClient
-from goodreads_cli.models import ShelfItem
+from goodreads_tools.http_client import GoodreadsClient
+from goodreads_tools.models import ShelfItem
 
 
 def _text(node: ElementTree.Element | None) -> str | None:

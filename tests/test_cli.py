@@ -3,8 +3,8 @@ import re
 
 from typer.testing import CliRunner
 
-from goodreads_cli.cli import app
-from goodreads_cli.models import BookDetails, ReadingTimelineEntry, SearchItem, ShelfItem
+from goodreads_tools.cli import app
+from goodreads_tools.models import BookDetails, ReadingTimelineEntry, SearchItem, ShelfItem
 
 runner = CliRunner()
 
@@ -28,7 +28,7 @@ def test_cli_search_json(monkeypatch) -> None:
             )
         ]
 
-    monkeypatch.setattr("goodreads_cli.cli.search_books", fake_search_books)
+    monkeypatch.setattr("goodreads_tools.cli.search_books", fake_search_books)
     result = runner.invoke(app, ["public", "search", "Fake", "--json"])
     assert result.exit_code == 0
 
@@ -48,7 +48,7 @@ def test_cli_book_json(monkeypatch) -> None:
             ratings_count=55,
         )
 
-    monkeypatch.setattr("goodreads_cli.cli.get_book_details", fake_book_details)
+    monkeypatch.setattr("goodreads_tools.cli.get_book_details", fake_book_details)
     result = runner.invoke(app, ["public", "book", "show", "123", "--json"])
     assert result.exit_code == 0
     payload = json.loads(_strip_ansi(result.stdout))
@@ -69,7 +69,7 @@ def test_cli_shelf_export_csv(monkeypatch) -> None:
             )
         ]
 
-    monkeypatch.setattr("goodreads_cli.cli.get_shelf_items", fake_shelf_items)
+    monkeypatch.setattr("goodreads_tools.cli.get_shelf_items", fake_shelf_items)
     result = runner.invoke(
         app,
         ["public", "shelf", "export", "--user", "1", "--shelf", "all", "--format", "csv"],
@@ -91,7 +91,7 @@ def test_cli_shelf_timeline_jsonl(monkeypatch) -> None:
             )
         ]
 
-    monkeypatch.setattr("goodreads_cli.cli.get_reading_timeline", fake_timeline)
+    monkeypatch.setattr("goodreads_tools.cli.get_reading_timeline", fake_timeline)
     result = runner.invoke(app, ["public", "shelf", "timeline", "--user", "1"])
     assert result.exit_code == 0
     payload = json.loads(_strip_ansi(result.stdout))
@@ -114,8 +114,8 @@ def test_cli_shelf_chart(monkeypatch) -> None:
     def fake_chart(*_: object, **__: object) -> str:
         return "CHART"
 
-    monkeypatch.setattr("goodreads_cli.cli.get_reading_timeline", fake_timeline)
-    monkeypatch.setattr("goodreads_cli.cli.render_pages_per_day_chart", fake_chart)
+    monkeypatch.setattr("goodreads_tools.cli.get_reading_timeline", fake_timeline)
+    monkeypatch.setattr("goodreads_tools.cli.render_pages_per_day_chart", fake_chart)
     result = runner.invoke(app, ["public", "shelf", "chart", "--user", "1"])
     assert result.exit_code == 0
     assert "CHART" in result.stdout

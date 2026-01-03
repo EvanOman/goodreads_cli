@@ -6,7 +6,7 @@ from typing import Any
 import httpx
 
 DEFAULT_BASE_URL = "https://www.goodreads.com"
-DEFAULT_USER_AGENT = "goodreads-cli/0.1 (+https://github.com/)"
+DEFAULT_USER_AGENT = "goodreads-tools/0.1 (+https://github.com/EvanOman/goodreads-tools)"
 
 
 class GoodreadsClient:

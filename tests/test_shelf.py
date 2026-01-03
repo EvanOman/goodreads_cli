@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from goodreads_cli.public.shelf import (
+from goodreads_tools.public.shelf import (
     parse_shelf_rss,
     shelf_items_to_csv,
     shelf_items_to_json,

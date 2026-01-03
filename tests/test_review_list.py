@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from goodreads_cli.public.review_list import parse_review_list_html
+from goodreads_tools.public.review_list import parse_review_list_html
 
 
 def test_parse_review_list_html_sessions() -> None:

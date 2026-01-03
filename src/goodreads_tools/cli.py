@@ -9,31 +9,31 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from goodreads_cli.auth.csrf import fetch_csrf_token
-from goodreads_cli.auth.session import (
+from goodreads_tools.auth.csrf import fetch_csrf_token
+from goodreads_tools.auth.session import (
     SESSION_PATH,
     create_session_from_browser,
     create_session_from_cookie_string,
     load_session,
     save_session,
 )
-from goodreads_cli.auth.user import get_current_user
-from goodreads_cli.http_client import GoodreadsClient
-from goodreads_cli.public.book import get_book_details
-from goodreads_cli.public.reading_chart import render_pages_per_day_chart
-from goodreads_cli.public.reading_stats import (
+from goodreads_tools.auth.user import get_current_user
+from goodreads_tools.http_client import GoodreadsClient
+from goodreads_tools.public.book import get_book_details
+from goodreads_tools.public.reading_chart import render_pages_per_day_chart
+from goodreads_tools.public.reading_stats import (
     bin_daily_pages,
     clip_daily_pages,
     estimate_daily_pages,
     parse_iso_date,
 )
-from goodreads_cli.public.search import search_books
-from goodreads_cli.public.shelf import (
+from goodreads_tools.public.search import search_books
+from goodreads_tools.public.shelf import (
     get_shelf_items,
     shelf_items_to_csv,
     shelf_items_to_json,
 )
-from goodreads_cli.public.timeline import (
+from goodreads_tools.public.timeline import (
     StartDateSource,
     TimelineSource,
     get_reading_timeline,

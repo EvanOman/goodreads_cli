@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from goodreads_cli.auth.session import (
+from goodreads_tools.auth.session import (
     SessionData,
     load_session,
     parse_cookie_string,

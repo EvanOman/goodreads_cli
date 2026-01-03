@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from goodreads_cli.auth.csrf import fetch_csrf_token
-from goodreads_cli.auth.session import create_session_from_cookie_string
-from goodreads_cli.http_client import GoodreadsClient
+from goodreads_tools.auth.csrf import fetch_csrf_token
+from goodreads_tools.auth.session import create_session_from_cookie_string
+from goodreads_tools.http_client import GoodreadsClient
 
 
 @pytest.mark.live

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
-from goodreads_cli.http_client import GoodreadsClient
-from goodreads_cli.models import SearchItem
+from goodreads_tools.http_client import GoodreadsClient
+from goodreads_tools.models import SearchItem
 
 
 def parse_search_results(payload: Iterable[dict]) -> list[SearchItem]:

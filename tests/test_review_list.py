@@ -17,5 +17,5 @@ def test_parse_review_list_html_sessions() -> None:
     assert first.finished_at == "2024-01-10"
     assert first.shelves == ["read"]
 
-    assert second.started_at == "2024-02-01"
+    assert second.started_at == "2025-08-01"
     assert second.finished_at == "2024-02-14"

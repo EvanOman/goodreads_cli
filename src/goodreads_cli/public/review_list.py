@@ -9,7 +9,7 @@ from selectolax.parser import HTMLParser, Node
 from goodreads_cli.http_client import DEFAULT_BASE_URL, GoodreadsClient
 from goodreads_cli.models import ReadingTimelineEntry
 
-_DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y")
+_DATE_FORMATS = ("%b %d, %Y", "%B %d, %Y", "%b %Y", "%B %Y", "%Y")
 
 
 def _parse_human_date(value: str | None) -> str | None:
@@ -47,8 +47,11 @@ def _extract_session_id(classes: str, prefix: str) -> str | None:
     return None
 
 
-def _parse_session_dates(cell: Node, field: str, value_class: str) -> dict[str, str]:
+def _parse_session_dates(
+    cell: Node, field: str, value_class: str
+) -> tuple[dict[str, str], list[str]]:
     sessions: dict[str, str] = {}
+    order: list[str] = []
     prefix = f"{field}_"
     for node in cell.css("div.editable_date"):
         classes = node.attributes.get("class") or ""
@@ -61,7 +64,8 @@ def _parse_session_dates(cell: Node, field: str, value_class: str) -> dict[str, 
             value = _parse_human_date(span.text(strip=True))
         if value:
             sessions[session_id] = value
-    return sessions
+            order.append(session_id)
+    return sessions, order
 
 
 def parse_review_list_html(html: str, shelf: str | None = None) -> list[ReadingTimelineEntry]:
@@ -78,15 +82,23 @@ def parse_review_list_html(html: str, shelf: str | None = None) -> list[ReadingT
         started_node = row.css_first("td.field.date_started")
         read_node = row.css_first("td.field.date_read")
 
-        started_sessions = (
+        started_sessions, started_order = (
             _parse_session_dates(started_node, "date_started", "date_started_value")
             if started_node
-            else {}
+            else ({}, [])
         )
-        read_sessions = (
-            _parse_session_dates(read_node, "date_read", "date_read_value") if read_node else {}
+        read_sessions, read_order = (
+            _parse_session_dates(read_node, "date_read", "date_read_value")
+            if read_node
+            else ({}, [])
         )
-        session_ids = set(started_sessions) | set(read_sessions)
+        session_ids: list[str] = []
+        seen: set[str] = set()
+        for session_id in started_order + read_order:
+            if session_id in seen:
+                continue
+            seen.add(session_id)
+            session_ids.append(session_id)
         shelves = [shelf] if shelf else []
 
         if not session_ids:

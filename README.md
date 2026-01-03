@@ -22,7 +22,18 @@ uv run goodreads-cli public shelf list --user 1 --shelf all -n 5
 
 # export a shelf
 uv run goodreads-cli public shelf export --user 1 --shelf all --format json
+
+# export a reading timeline as JSONL
+uv run goodreads-cli public shelf timeline --user 1 --shelf all --format jsonl
+
+# export a reading timeline using HTML list (includes start/read dates)
+uv run goodreads-cli public shelf timeline --user 1 --shelf read --source html --format jsonl
+
+# render a pages/day chart for a date range
+uv run goodreads-cli public shelf chart --user 1 --from 2025-01-01 --to 2025-02-01 --bin-days 7
 ```
+
+Sample outputs live in `samples/README.md`.
 
 ### Current status
 
@@ -57,6 +68,15 @@ uv run goodreads-cli public shelf list --user 1 --shelf all -n 5
 
 # export a shelf to JSON or CSV
 uv run goodreads-cli public shelf export --user 1 --shelf all --format json
+
+# export reading timeline rows for dashboards
+uv run goodreads-cli public shelf timeline --user 1 --shelf all --format jsonl
+
+# export timeline entries with reread sessions (HTML list)
+uv run goodreads-cli public shelf timeline --user 1 --shelf read --source html --format jsonl
+
+# render a pages/day chart (bins optional)
+uv run goodreads-cli public shelf chart --user 1 --from 2025-01-01 --to 2025-02-01 --bin-days 7
 
 # store cookies from browser or manual cookie string
 uv run goodreads-cli auth login --browser chrome

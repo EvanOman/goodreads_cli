@@ -25,6 +25,13 @@
 - Standard HTML pages embed machine-readable data:
   - `book/show/<slug-or-id>` pages ship a large `__NEXT_DATA__` JSON blob containing book metadata, aggregated stats, and featured reviews. This can be parsed instead of hand-writing selectors.
   - Shelf pages (`review/list/<user_id>`) include the shelf table in HTML and expose links for each row. Even when signed out we can parse book ids, shelves, ratings, etc.
+  - The shelf table HTML contains hidden `date_started` and `date_read` cells with one or more reading sessions (for rereads). These are rendered even when not signed in.
+
+- Shelf RSS payloads already include page counts and reading timestamps:
+  - Each `<item>` includes `<book><num_pages>...</num_pages></book>`, which avoids extra book page requests for page counts.
+  - Reading dates are available as `<user_read_at>` (finish date), `<user_date_added>` (shelf add date), and `<user_date_created>` (review creation date).
+  - A `<user_date_started>` tag is not consistently present in fixtures; parse it if present but plan for it to be missing.
+  - If `<num_pages>` is missing, we can fall back to the book page `__NEXT_DATA__` (`details.numPages`) before considering external sources (Open Library / ISBN-based lookups).
 
 - Quotes, Listopia, and other list pages follow predictable patterns (e.g., `list/show/<id>`). These can be scraped later using `selectolax`/`BeautifulSoup` with heuristics similar to RSS.
 
@@ -33,6 +40,7 @@
 - Sign-in is handled via Amazon/Apple/Google single-sign-on pages (`/ap/signin?...`). Automating those flows would require emulating Amazon login, so the more practical approach is to reuse an existing browser session by copying cookies (similar to X’s unofficial tools).
 - Visiting any page yields cookies `_session_id2`, `ccsid`, and `locale`, and each page ships a `<meta name="csrf-token">`. POST endpoints will require that token plus the session cookie.
 - Book pages render interactive “Want to Read” / “Choose a shelf” controls; when logged in they submit AJAX requests. We’ll need to capture those network calls once (via browser devtools) to reproduce the URLs and payloads. The HTML already hints at endpoints such as `/review/rate/<id>` and `/review/list/<user>?shelf=...`.
+- For authenticated exports, Goodreads still offers a CSV export page (`/review_porter/export`) that includes `Date Started`, `Date Read`, and `Number of Pages`. This may be the most complete source for start/finish dates but requires logged-in cookies and asynchronous export handling.
 
 ## Existing community projects / patterns
 
@@ -47,6 +55,14 @@
 - [`goodreads-cli`](https://github.com/mjip/goodreads-cli) and similar projects depended on the deprecated API and now fail because new keys can’t be issued. This validates the demand for a scraping-based replacement.
 
 - Commercial scrapers (Apify’s Goodreads Book Search actor, MCP marketplace tools) already sell shelf/search data, which confirms that the HTML/RSS approach works at scale and that the site doesn’t aggressively block bots when requests are throttled.
+
+## CLI visualization options
+
+- [`plotext`](https://github.com/piccolomo/plotext) renders bar and line charts directly in the terminal, returns rendered strings via `build()`, and is pure Python.
+- [`termplotlib`](https://github.com/nschloe/termplotlib) is small and MIT-licensed, but focuses on scatter/line plots and uses `numpy` for some features.
+- `rich` can be used to build custom bar-like tables, but it requires more manual layout for axes and labels.
+
+Decision: use `plotext` for a minimal dependency that can render bar charts with labels in a single call, while keeping the math and binning logic in our own modules for test coverage.
 
 ## Risks and unknowns
 

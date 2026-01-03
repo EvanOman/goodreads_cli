@@ -4,12 +4,13 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
-    { name = "Evan Oman", email = "evan058@gmail.com" }
+    { name = "Evan Oman" }
 ]
 requires-python = ">=3.13"
 dependencies = [
     "browser-cookie3>=0.20.1",
     "httpx>=0.28.1",
+    "plotext>=5.3.2",
     "pydantic>=2.12.5",
     "rich>=14.2.0",
     "selectolax>=0.4.6",

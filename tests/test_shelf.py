@@ -18,6 +18,8 @@ def test_parse_shelf_rss() -> None:
     assert first.title == "Circle of Days"
     assert first.book_id == "220337985"
     assert first.author == "Ken Follett"
+    assert first.pages == 697
+    assert first.date_created == "Fri, 28 Mar 2025 02:40:30 -0700"
 
 
 def test_shelf_export_formats() -> None:

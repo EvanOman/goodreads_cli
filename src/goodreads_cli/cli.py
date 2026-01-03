@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
+from typing import cast
 
 import typer
 from rich.console import Console
@@ -18,11 +20,25 @@ from goodreads_cli.auth.session import (
 from goodreads_cli.auth.user import get_current_user
 from goodreads_cli.http_client import GoodreadsClient
 from goodreads_cli.public.book import get_book_details
+from goodreads_cli.public.reading_chart import render_pages_per_day_chart
+from goodreads_cli.public.reading_stats import (
+    bin_daily_pages,
+    clip_daily_pages,
+    estimate_daily_pages,
+    parse_iso_date,
+)
 from goodreads_cli.public.search import search_books
 from goodreads_cli.public.shelf import (
     get_shelf_items,
     shelf_items_to_csv,
     shelf_items_to_json,
+)
+from goodreads_cli.public.timeline import (
+    StartDateSource,
+    TimelineSource,
+    get_reading_timeline,
+    timeline_entries_to_json,
+    timeline_entries_to_jsonl,
 )
 
 app = typer.Typer(help="Unofficial Goodreads CLI (see docs/PLAN.md).")
@@ -238,3 +254,130 @@ def shelf_export(
         output.write_text(content, encoding="utf-8")
         return
     typer.echo(content)
+
+
+@public_shelf_app.command("timeline")
+def shelf_timeline(
+    user: str = typer.Option(..., "--user"),
+    shelf: str = typer.Option("all", "--shelf"),
+    fmt: str = typer.Option("jsonl", "--format", "-f"),
+    source: str = typer.Option("rss", "--source", help="rss|html"),
+    start_source: str = typer.Option(
+        "auto",
+        "--start-source",
+        help="auto|started|added|created",
+    ),
+    resolve_pages: bool = typer.Option(False, "--resolve-pages/--no-resolve-pages"),
+    max_pages: int | None = typer.Option(None, "--max-pages"),
+    output: Path | None = typer.Option(None, "--output", "-o"),
+) -> None:
+    """Export reading timeline entries for a shelf as JSONL or JSON."""
+    fmt_lower = fmt.lower()
+    if fmt_lower not in {"jsonl", "json"}:
+        raise typer.BadParameter("format must be 'jsonl' or 'json'")
+
+    source_value = source.lower()
+    if source_value not in {"rss", "html"}:
+        raise typer.BadParameter("source must be 'rss' or 'html'")
+
+    start_source_value = start_source.lower()
+    if start_source_value not in {"auto", "started", "added", "created"}:
+        raise typer.BadParameter("start-source must be auto|started|added|created")
+
+    entries = get_reading_timeline(
+        user,
+        shelf,
+        source=cast(TimelineSource, source_value),
+        start_source=cast(StartDateSource, start_source_value),
+        resolve_pages=resolve_pages,
+        max_pages=max_pages,
+    )
+    content = (
+        timeline_entries_to_jsonl(entries)
+        if fmt_lower == "jsonl"
+        else timeline_entries_to_json(entries)
+    )
+    if output:
+        output.write_text(content, encoding="utf-8")
+        return
+    typer.echo(content)
+
+
+def _parse_cli_date(value: str | None, option_name: str) -> date | None:
+    if value is None:
+        return None
+    parsed = parse_iso_date(value)
+    if parsed is None:
+        raise typer.BadParameter(f"{option_name} must be in YYYY-MM-DD format")
+    return parsed
+
+
+@public_shelf_app.command("chart")
+def shelf_chart(
+    user: str = typer.Option(..., "--user"),
+    shelf: str = typer.Option("all", "--shelf"),
+    start_date: str | None = typer.Option(None, "--from", "--start-date"),
+    end_date: str | None = typer.Option(None, "--to", "--end-date"),
+    bin_days: int = typer.Option(1, "--bin-days", min=1),
+    source: str = typer.Option("rss", "--source", help="rss|html"),
+    start_source: str = typer.Option(
+        "auto",
+        "--start-source",
+        help="auto|started|added|created",
+    ),
+    resolve_pages: bool = typer.Option(False, "--resolve-pages/--no-resolve-pages"),
+    max_pages: int | None = typer.Option(None, "--max-pages"),
+    width: int = typer.Option(100, "--width"),
+    height: int = typer.Option(20, "--height"),
+) -> None:
+    """Render a pages/day bar chart for a shelf over a date range."""
+    source_value = source.lower()
+    if source_value not in {"rss", "html"}:
+        raise typer.BadParameter("source must be 'rss' or 'html'")
+
+    start_source_value = start_source.lower()
+    if start_source_value not in {"auto", "started", "added", "created"}:
+        raise typer.BadParameter("start-source must be auto|started|added|created")
+
+    entries = get_reading_timeline(
+        user,
+        shelf,
+        source=cast(TimelineSource, source_value),
+        start_source=cast(StartDateSource, start_source_value),
+        resolve_pages=resolve_pages,
+        max_pages=max_pages,
+    )
+    if not entries:
+        typer.echo("No timeline entries found.", err=True)
+        raise typer.Exit(code=1)
+
+    parsed_start = _parse_cli_date(start_date, "--from/--start-date")
+    parsed_end = _parse_cli_date(end_date, "--to/--end-date")
+    result = estimate_daily_pages(entries, coerce_invalid_ranges=True)
+    if not result.daily_pages:
+        typer.echo("No pages with start/end dates were found.", err=True)
+        raise typer.Exit(code=1)
+
+    if parsed_start is None:
+        parsed_start = min(result.daily_pages)
+    if parsed_end is None:
+        parsed_end = max(result.daily_pages)
+    if parsed_start > parsed_end:
+        raise typer.BadParameter("start date must be <= end date")
+
+    daily_pages = clip_daily_pages(result.daily_pages, parsed_start, parsed_end)
+    bins = bin_daily_pages(daily_pages, parsed_start, parsed_end, bin_days=bin_days)
+    title = f"Pages per day ({parsed_start.isoformat()}..{parsed_end.isoformat()})"
+    chart = render_pages_per_day_chart(bins, width=width, height=height, title=title)
+    typer.echo(chart)
+
+    skipped = result.skipped_missing_pages + result.skipped_missing_dates
+    if skipped or result.coerced_invalid_ranges or result.skipped_invalid_ranges:
+        typer.echo(
+            "Skipped entries missing pages or dates: "
+            f"{result.skipped_missing_pages} missing pages, "
+            f"{result.skipped_missing_dates} missing dates. "
+            f"Coerced invalid ranges: {result.coerced_invalid_ranges}. "
+            f"Skipped invalid ranges: {result.skipped_invalid_ranges}.",
+            err=True,
+        )

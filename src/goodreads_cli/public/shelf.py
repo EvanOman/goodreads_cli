@@ -47,6 +47,9 @@ def parse_shelf_rss(xml_text: str) -> list[ShelfItem]:
     root = ElementTree.fromstring(xml_text)
     items: list[ShelfItem] = []
     for item in root.findall(".//item"):
+        pages = _int(_text(item.find("book/num_pages")))
+        if pages is None:
+            pages = _int(_text(item.find("num_pages")))
         items.append(
             ShelfItem(
                 title=_text(item.find("title")) or "",
@@ -57,10 +60,13 @@ def parse_shelf_rss(xml_text: str) -> list[ShelfItem]:
                 rating=_int(_text(item.find("user_rating"))),
                 read_at=_text(item.find("user_read_at")),
                 date_added=_text(item.find("user_date_added")),
+                date_created=_text(item.find("user_date_created")),
+                date_started=_text(item.find("user_date_started")),
                 shelves=_split_shelves(_text(item.find("user_shelves"))),
                 review=_text(item.find("user_review")),
                 image_url=_text(item.find("book_image_url")),
                 book_published=_text(item.find("book_published")),
+                pages=pages,
                 isbn=_text(item.find("isbn")),
             )
         )
@@ -113,8 +119,11 @@ def shelf_items_to_csv(items: Iterable[ShelfItem]) -> str:
             "average_rating",
             "read_at",
             "date_added",
+            "date_created",
+            "date_started",
             "shelves",
             "book_published",
+            "pages",
             "isbn",
             "image_url",
         ]
@@ -130,8 +139,11 @@ def shelf_items_to_csv(items: Iterable[ShelfItem]) -> str:
                 item.average_rating if item.average_rating is not None else "",
                 item.read_at or "",
                 item.date_added or "",
+                item.date_created or "",
+                item.date_started or "",
                 ",".join(item.shelves),
                 item.book_published or "",
+                item.pages if item.pages is not None else "",
                 item.isbn or "",
                 item.image_url or "",
             ]

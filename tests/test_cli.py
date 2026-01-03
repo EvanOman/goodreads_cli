@@ -4,7 +4,7 @@ import re
 from typer.testing import CliRunner
 
 from goodreads_cli.cli import app
-from goodreads_cli.models import BookDetails, SearchItem, ShelfItem
+from goodreads_cli.models import BookDetails, ReadingTimelineEntry, SearchItem, ShelfItem
 
 runner = CliRunner()
 
@@ -76,3 +76,46 @@ def test_cli_shelf_export_csv(monkeypatch) -> None:
     )
     assert result.exit_code == 0
     assert "title,author,book_id,link" in result.stdout
+
+
+def test_cli_shelf_timeline_jsonl(monkeypatch) -> None:
+    def fake_timeline(_: str, __: str, **___) -> list[ReadingTimelineEntry]:
+        return [
+            ReadingTimelineEntry(
+                title="Timeline Book",
+                book_id="42",
+                pages=321,
+                started_at="2024-01-01T00:00:00+00:00",
+                finished_at="2024-01-10T00:00:00+00:00",
+                shelves=["read"],
+            )
+        ]
+
+    monkeypatch.setattr("goodreads_cli.cli.get_reading_timeline", fake_timeline)
+    result = runner.invoke(app, ["public", "shelf", "timeline", "--user", "1"])
+    assert result.exit_code == 0
+    payload = json.loads(_strip_ansi(result.stdout))
+    assert payload["title"] == "Timeline Book"
+    assert payload["pages"] == 321
+
+
+def test_cli_shelf_chart(monkeypatch) -> None:
+    def fake_timeline(_: str, __: str, **___) -> list[ReadingTimelineEntry]:
+        return [
+            ReadingTimelineEntry(
+                title="Chart Book",
+                book_id="99",
+                pages=300,
+                started_at="2024-01-01T00:00:00+00:00",
+                finished_at="2024-01-03T00:00:00+00:00",
+            )
+        ]
+
+    def fake_chart(*_: object, **__: object) -> str:
+        return "CHART"
+
+    monkeypatch.setattr("goodreads_cli.cli.get_reading_timeline", fake_timeline)
+    monkeypatch.setattr("goodreads_cli.cli.render_pages_per_day_chart", fake_chart)
+    result = runner.invoke(app, ["public", "shelf", "chart", "--user", "1"])
+    assert result.exit_code == 0
+    assert "CHART" in result.stdout

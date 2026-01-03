@@ -58,11 +58,23 @@ class ShelfItem(BaseModel):
     rating: int | None = None
     read_at: str | None = None
     date_added: str | None = None
+    date_created: str | None = None
+    date_started: str | None = None
     shelves: list[str] = []
     review: str | None = None
     image_url: str | None = None
     book_published: str | None = None
+    pages: int | None = None
     isbn: str | None = None
+
+
+class ReadingTimelineEntry(BaseModel):
+    title: str
+    book_id: str
+    pages: int | None = None
+    started_at: str | None = None
+    finished_at: str | None = None
+    shelves: list[str] = []
 
 
 class UserInfo(BaseModel):

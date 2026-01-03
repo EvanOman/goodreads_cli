@@ -61,18 +61,23 @@ Milestones with testable deliverables are tracked in `docs/MILESTONES.md`.
 - Expose a Python API surface (`from goodreads_cli import Client`) that the CLI and agents share.
 - Later we can wrap commands as MCP skills or other agent-toolkits so the user can ask for “plan my January TBR” and the agent orchestrates CLI commands.
 
-## Near-term tasks
+## Completed setup tasks (historical)
 
-1. Flesh out `README.md` with goals, install instructions, and usage examples (even if some are “coming soon”).
-2. Wire `typer` into `src/goodreads_cli/__init__.py`, add a `cli.py` module, and create placeholder commands (`search`, `book`, `shelf`, `login`).
-3. Implement the unauthenticated search + book detail parsing since they require no login.
-4. Add `docs/flow-write.md` notes once we record actual POST requests in DevTools.
-5. Set up basic tests + CI (optional, depending on time).
+1. Flesh out `README.md` with goals, install instructions, and usage examples.
+2. Wire `typer` into `src/goodreads_cli/__init__.py`, add `cli.py`, and create commands.
+3. Implement unauthenticated search + book detail parsing.
+4. Add `docs/flow-write.md` notes (write flows remain future work).
+5. Set up tests + CI.
 
 ## Progress log
 
 - Milestone 1 complete: search command, HTTP client, and unit/live tests. See `docs/MILESTONES.md`.
 - Milestone 2 complete: book show command, HTML parser for `__NEXT_DATA__`, and unit/live tests.
 - Milestone 3 complete: shelf RSS parsing, list/export commands, and unit/live tests.
-- Milestone 4 in progress: login/whoami auth scaffolding + CSRF extraction complete; write flows pending.
-- Write-flow capture instructions live in `docs/flow-write.md`.
+- Milestone 4 deferred: write flows are not started (auth helpers exist, but no write commands).
+- Milestone 5 complete: reading timeline export for dashboard data (pages + start/end dates + chart).
+- Write-flow capture instructions live in `docs/flow-write.md` for future work.
+
+## Current status
+
+The initial dashboard spec (public timeline export + pages/day chart) is complete. No work is in progress; future write/automation features remain planned but not started.

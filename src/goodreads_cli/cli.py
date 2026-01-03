@@ -336,7 +336,7 @@ def shelf_chart(
 
     parsed_start = _parse_cli_date(start_date, "--from/--start-date")
     parsed_end = _parse_cli_date(end_date, "--to/--end-date")
-    result = estimate_daily_pages(entries)
+    result = estimate_daily_pages(entries, coerce_invalid_ranges=True)
     if not result.daily_pages:
         typer.echo("No pages with start/end dates were found.", err=True)
         raise typer.Exit(code=1)
@@ -354,14 +354,13 @@ def shelf_chart(
     chart = render_pages_per_day_chart(bins, width=width, height=height, title=title)
     typer.echo(chart)
 
-    skipped = (
-        result.skipped_missing_pages + result.skipped_missing_dates + result.skipped_invalid_ranges
-    )
-    if skipped:
+    skipped = result.skipped_missing_pages + result.skipped_missing_dates
+    if skipped or result.coerced_invalid_ranges or result.skipped_invalid_ranges:
         typer.echo(
             "Skipped entries missing pages or dates: "
             f"{result.skipped_missing_pages} missing pages, "
-            f"{result.skipped_missing_dates} missing dates, "
-            f"{result.skipped_invalid_ranges} invalid ranges.",
+            f"{result.skipped_missing_dates} missing dates. "
+            f"Coerced invalid ranges: {result.coerced_invalid_ranges}. "
+            f"Skipped invalid ranges: {result.skipped_invalid_ranges}.",
             err=True,
         )

@@ -13,6 +13,7 @@ class DailyPagesResult:
     skipped_missing_pages: int = 0
     skipped_missing_dates: int = 0
     skipped_invalid_ranges: int = 0
+    coerced_invalid_ranges: int = 0
 
 
 @dataclass(frozen=True)
@@ -36,11 +37,16 @@ def parse_iso_date(value: str | None) -> date | None:
             return None
 
 
-def estimate_daily_pages(entries: Iterable[ReadingTimelineEntry]) -> DailyPagesResult:
+def estimate_daily_pages(
+    entries: Iterable[ReadingTimelineEntry],
+    *,
+    coerce_invalid_ranges: bool = False,
+) -> DailyPagesResult:
     daily_pages: dict[date, float] = {}
     skipped_missing_pages = 0
     skipped_missing_dates = 0
     skipped_invalid_ranges = 0
+    coerced_invalid_ranges = 0
 
     for entry in entries:
         if entry.pages is None or entry.pages <= 0:
@@ -52,8 +58,12 @@ def estimate_daily_pages(entries: Iterable[ReadingTimelineEntry]) -> DailyPagesR
             skipped_missing_dates += 1
             continue
         if end < start:
-            skipped_invalid_ranges += 1
-            continue
+            if coerce_invalid_ranges:
+                coerced_invalid_ranges += 1
+                start = end
+            else:
+                skipped_invalid_ranges += 1
+                continue
         days = (end - start).days + 1
         pages_per_day = entry.pages / days
         current = start
@@ -66,6 +76,7 @@ def estimate_daily_pages(entries: Iterable[ReadingTimelineEntry]) -> DailyPagesR
         skipped_missing_pages=skipped_missing_pages,
         skipped_missing_dates=skipped_missing_dates,
         skipped_invalid_ranges=skipped_invalid_ranges,
+        coerced_invalid_ranges=coerced_invalid_ranges,
     )
 
 

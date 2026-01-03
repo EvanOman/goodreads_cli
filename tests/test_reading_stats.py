@@ -90,6 +90,22 @@ def test_estimate_daily_pages_skips_invalid_entries() -> None:
     assert result.skipped_missing_pages == 1
     assert result.skipped_missing_dates == 1
     assert result.skipped_invalid_ranges == 1
+    assert result.coerced_invalid_ranges == 0
+
+
+def test_estimate_daily_pages_coerces_invalid_ranges() -> None:
+    entries = [
+        ReadingTimelineEntry(
+            title="Inverted range",
+            book_id="7",
+            pages=12,
+            started_at="2024-01-03T00:00:00+00:00",
+            finished_at="2024-01-01T00:00:00+00:00",
+        )
+    ]
+    result = estimate_daily_pages(entries, coerce_invalid_ranges=True)
+    assert result.daily_pages[date(2024, 1, 1)] == 12
+    assert result.coerced_invalid_ranges == 1
 
 
 def test_bin_daily_pages() -> None:

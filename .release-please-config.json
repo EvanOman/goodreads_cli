@@ -1,0 +1,9 @@
+{
+  "release-type": "python",
+  "packages": {
+    ".": {
+      "package-name": "goodreads-cli",
+      "extra-files": ["pyproject.toml"]
+    }
+  }
+}

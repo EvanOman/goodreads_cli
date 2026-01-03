@@ -3,6 +3,11 @@ name: Publish to PyPI
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to publish (e.g. goodreads-tools-v1.0.0)"
+        required: true
 
 permissions:
   contents: read
@@ -18,13 +23,16 @@ jobs:
 
       - name: Set version from tag
         env:
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
         run: |
-          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Tag must be vX.Y.Z" >&2
+          if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            VERSION="${TAG#v}"
+          elif [[ "$TAG" =~ ^goodreads-tools-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            VERSION="${TAG#goodreads-tools-v}"
+          else
+            echo "Tag must be vX.Y.Z or goodreads-tools-vX.Y.Z" >&2
             exit 1
           fi
-          VERSION="${TAG#v}"
           export VERSION
           python - <<'PY'
           import os

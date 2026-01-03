@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/EvanOman/goodreads-tools/compare/goodreads-tools-v1.0.0...goodreads-tools-v1.1.0) (2026-01-03)
+
+
+### Features
+
+* speed up html timeline pagination ([#11](https://github.com/EvanOman/goodreads-tools/issues/11)) ([992199b](https://github.com/EvanOman/goodreads-tools/commit/992199bc0c91a62f091ded651e1e7c6d26e09b7c))
+
 ## [1.0.0](https://github.com/EvanOman/goodreads-tools/compare/goodreads-tools-v0.0.2...goodreads-tools-v1.0.0) (2026-01-03)
 
 

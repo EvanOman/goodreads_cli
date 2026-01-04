@@ -26,6 +26,7 @@ requires-python = ">=3.13"
 dependencies = [
     "browser-cookie3>=0.20.1",
     "httpx>=0.28.1",
+    "matplotlib>=3.8.0",
     "plotext>=5.3.2",
     "pydantic>=2.12.5",
     "rich>=14.2.0",

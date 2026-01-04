@@ -352,6 +352,12 @@ def shelf_chart(
     ),
     width: int = typer.Option(100, "--width"),
     height: int = typer.Option(20, "--height"),
+    output: Path | None = typer.Option(
+        None,
+        "--output",
+        "-o",
+        help="Output path for PNG chart (e.g., pages_per_day.png)",
+    ),
 ) -> None:
     """Render a pages/day bar chart for a shelf over a date range."""
     source_value = source.lower()
@@ -392,8 +398,23 @@ def shelf_chart(
     daily_pages = clip_daily_pages(result.daily_pages, parsed_start, parsed_end)
     bins = bin_daily_pages(daily_pages, parsed_start, parsed_end, bin_days=bin_days)
     title = f"Pages per day ({parsed_start.isoformat()}..{parsed_end.isoformat()})"
-    chart = render_pages_per_day_chart(bins, width=width, height=height, title=title)
-    typer.echo(chart)
+
+    # Convert width/height to inches for matplotlib if outputting PNG
+    fig_width = width // 10 if output else width
+    fig_height = height // 3 if output else height
+
+    result_str = render_pages_per_day_chart(
+        bins,
+        width=fig_width,
+        height=fig_height,
+        title=title,
+        output=output,
+    )
+    if result_str:
+        if output:
+            typer.echo(f"Chart saved to {result_str}")
+        else:
+            typer.echo(result_str)
 
     skipped = result.skipped_missing_pages + result.skipped_missing_dates
     if skipped or result.coerced_invalid_ranges or result.skipped_invalid_ranges:
